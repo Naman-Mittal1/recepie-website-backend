@@ -47,7 +47,7 @@ router.post("/", verifyToken, async (req, res) => {
 });
 
 //delete
-router.delete("/:recipeId", verifyToken, async (req, res) => {
+router.delete("/:recipeId", async (req, res) => {
   try {
     const { recipeId } = req.params;
 
@@ -57,11 +57,6 @@ router.delete("/:recipeId", verifyToken, async (req, res) => {
     if (!recipe) {
       return res.status(404).json({ message: "Recipe not found" });
     }
-
-    // Check if the authenticated user is the owner of the recipe
-//     if (recipe.userOwner !== req.user.userID) {
-//       return res.status(403).json({ message: "Not authorized to delete this recipe" });
-//     }
 
     // Delete the recipe
     await recipe.remove();
