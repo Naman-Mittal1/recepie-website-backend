@@ -46,6 +46,33 @@ router.post("/", verifyToken, async (req, res) => {
   }
 });
 
+//delete
+router.delete("/:recipeId", verifyToken, async (req, res) => {
+  try {
+    const { recipeId } = req.params;
+
+    // Find the recipe by ID
+    const recipe = await RecipesModel.findById(recipeId);
+
+    if (!recipe) {
+      return res.status(404).json({ message: "Recipe not found" });
+    }
+
+    // Check if the authenticated user is the owner of the recipe
+//     if (recipe.userOwner !== req.user.userID) {
+//       return res.status(403).json({ message: "Not authorized to delete this recipe" });
+//     }
+
+    // Delete the recipe
+    await recipe.remove();
+
+    res.status(200).json({ message: "Recipe deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 // Get a recipe by ID
 router.get("/:recipeId", async (req, res) => {
   try {
